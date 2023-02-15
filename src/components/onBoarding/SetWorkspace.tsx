@@ -8,6 +8,7 @@ import { db } from "../../firebaseConfig";
 import logoFull from "../../assets/logos/logo-full.svg";
 import workspaceImg from "../../assets/images/workspace-img.png";
 import { User } from "../../types";
+import Loading from "../utils/Loading";
 
 type prop = {
 	user: User;
@@ -22,7 +23,7 @@ const SetWorkspace = (props: prop) => {
 	const [workspaceId, setWorkspaceId] = useState<string>(
 		"0gl9PbsAOFYcnIeNzUwy"
 	);
-	// const userId = "hW0ZxuFEOTPY6ysz6MC2";
+	
 	const [workspace, setWorkspace] = React.useState<any>({
 		id: "",
 		name: "",
@@ -55,6 +56,8 @@ const SetWorkspace = (props: prop) => {
 	React.useEffect(() => {
 		fetchData();
 	}, [props.user]);
+
+	if (isLoading) return <Loading />;
 
 	return (
 		<div
@@ -89,9 +92,9 @@ const SetWorkspace = (props: prop) => {
 						className="h-12"
 					/>
 					<div className="p-2 px-3 flex-grow font-bold">{workspace.name}</div>
-					<button>
+					<span>
 						<AiOutlineArrowRight className="font-bold text-2xl hover:text-auth_links" />
-					</button>
+					</span>
 				</div>
 			</div>
 

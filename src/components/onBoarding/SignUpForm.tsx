@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { TfiWorld } from 'react-icons/tfi';
 import { doc, setDoc } from "firebase/firestore"; 
 
@@ -6,6 +6,8 @@ import {User} from "../../types/index";
 import {db} from "../../firebaseConfig";
 
 import logoFull from "../../assets/logos/logo-full.svg";
+import { useQuery } from 'react-query';
+import Loading from '../utils/Loading';
 
 type prop = {
     user:User,
@@ -14,19 +16,40 @@ type prop = {
 
 const SignUpForm = (props:prop) => {
 
-    // const user = props.user;
     const phoneNumberInput:any = useRef();
-    const timeZoneInput:any = useRef();
+    // const timeZoneInput:any = useRef();
+
+    const [timeZone, setTimeZone] = useState<any>([]);
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
+    const [filteredTimeZones, setFilteredTimeZones] = useState<any>([]);
+    const [timeZoneInput, setTimeZoneInput] = useState<string>("");
+    let timeZones:any = []
+
+
+    async function fetchTimeZones(){
+        setIsLoading(true);
+        await fetch(`http://worldtimeapi.org/api/timezone`)
+        .then((response)=>response.json())
+        .then((data) => {
+            setTimeZone(data)
+            // timeZones= data;
+            // console.log(timeZones);
+            setIsLoading(false);
+        });
+        setIsLoading(false);
+    }
+
+    // const {data,isLoading, status} = useQuery("timeZone", fetchTimeZones)
 
     const handleSignUp = async () =>{
         let phoneNumber = props.user.phoneNumber;
         if(phoneNumber===""||phoneNumber==null){
             phoneNumber = phoneNumberInput.current.value;
         }
-        let timezone = timeZoneInput.current.value;
-        console.log(phoneNumber, timezone);
+        // let timezone = timeZoneInput.current.value;
+        // console.log(phoneNumber, timezone);
         props.user.phoneNumber =phoneNumber;
-        props.user.timezone = timezone;
+        props.user.timezone = timeZoneInput;
         props.setUser(props.user)
         console.log(props.user);
 
@@ -46,6 +69,35 @@ const SignUpForm = (props:prop) => {
         signup_form_component?.classList.toggle("flex");
     }
 
+    const handleTimeZoneChange = () => (e:React.ChangeEvent<HTMLInputElement>)=> {
+        let value = e.currentTarget.value;
+        console.log(value);
+        
+        if(value.length>0){
+            timeZones = timeZone.filter((timeZone: any) => {
+                if(timeZone.toLowerCase().includes(value.toLowerCase()))return timeZone;
+            })
+        }else{
+            timeZones=[]
+        }
+        setTimeZoneInput(value);
+        setFilteredTimeZones(timeZones);
+        console.log(timeZones);
+    }
+
+    const selectTimeZone = (timeZone:string) =>{
+        setTimeZoneInput(timeZone)
+        setFilteredTimeZones([]);
+    }
+
+    React.useEffect(()=>{
+        fetchTimeZones();
+    },[])
+
+    if(isLoading){
+        return <Loading />
+    }
+
     return (
         <div id="signup_form_component" className="h-screen w-screen flex-col items-center justify-between font-inter hidden">
             <div className="logo flex justify-center items-center relative w-full">
@@ -59,15 +111,22 @@ const SignUpForm = (props:prop) => {
 
             <div className="email-auth flex flex-col">
                 {(props.user.phoneNumber===""||props.user.phoneNumber==null)?<input type="text" name="phoneNumber" id="signup_phoneNumber" placeholder="work-phone-number" ref={phoneNumberInput} className="w-[350px] border border-[#bbbabb] p-2 rounded-md mb-5" />:""}
-                <input type="text" name="timezone" id="signup_timezone" placeholder="timezone" className="w-[350px] border border-[#bbbabb] p-2 rounded-md mb-5" ref={timeZoneInput} />
-                <button className="w-[350px] rounded-md bg-purple_dark p-2 text-white font-bold hover:bg-purple" onClick={()=>handleSignUp()}>Sign up</button>
+                <input type="text" name="timezone" id="signup_timezone" placeholder="timezone" className="w-[350px] border border-[#bbbabb] p-2 rounded-md" onChange={handleTimeZoneChange()} value={timeZoneInput}/>
+                {filteredTimeZones.length>0?
+                    <div className="w-[350px] h-[120px] border border-black overflow-y-scroll">
+                        {filteredTimeZones.map((timeZone:string) =>
+                            <div className="p-2 w-full cursor-pointer hover:bg-gray-300" onClick={()=>selectTimeZone(timeZone)}>{timeZone}</div>
+                        )}
+                    </div>
+                    :""}
+                <button className="w-[350px] rounded-md bg-purple_dark p-2 text-white font-bold hover:bg-purple mt-5" onClick={()=>handleSignUp()}>Sign up</button>
             </div>
 
             <div className="footer pb-10 text-faded_login">
                 <div className="mt-10 flex w-[350px] justify-between text-sm">
-                    <a href="#">Privacy & Terms</a>
-                    <a href="#">Contact Us</a>
-                    <a href="#" className="flex justify-center items-center"><TfiWorld className="mr-2"/>Contact Us</a>
+                    <span className="cursor-pointer">Privacy & Terms</span>
+                    <span className="cursor-pointer">Contact Us</span>
+                    <span className="flex justify-center items-center cursor-pointer"><TfiWorld className="mr-2"/>Contact Us</span>
                 </div>
             </div>
         </div>
