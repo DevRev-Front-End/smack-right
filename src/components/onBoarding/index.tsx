@@ -21,7 +21,7 @@ export default function OnBoardingComponent(props: any) {
 	});
 
 	return (
-		<React.Fragment>
+		<div className="bg-white">
 			{/* {onLogin===true?:} */}
 			<Signin
 				user={user}
@@ -40,9 +40,9 @@ export default function OnBoardingComponent(props: any) {
 				setUser={setUser}
 				setUserId={props.setUserId}
 				setWorkspaceId={props.setWorkspaceId}
-				toggleDashboard = {props.toggleDashboard}
+				toggleDashboard={props.toggleDashboard}
 				setToggleDashboard={props.setToggleDashboard}
 			/>
-		</React.Fragment>
+		</div>
 	);
 }
