@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useQuery } from "react-query";
 
 import DashBoard from "./components/dashboard";
 import OnBoardingComponent from "./components/onBoarding";
