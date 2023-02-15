@@ -47,6 +47,8 @@ const SetWorkspace = (props: prop) => {
 	function navigateToDashboard() {
 		props.setUserId(props.user.id);
 		props.setWorkspaceId(workspaceId);
+		sessionStorage.setItem("workspaceId",workspaceId);
+		sessionStorage.setItem("userId",props.user.id);
 		props.setToggleDashboard(!props.toggleDashboard);
 	}
 
