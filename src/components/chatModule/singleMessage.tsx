@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Markup } from "interweave";
 import { getDoc, doc } from "firebase/firestore";
 
 import { Message, User } from "../../types";
@@ -24,17 +25,6 @@ export default function SingleMessage(props: any) {
 		let userid = messageData.authorId;
 
 		fetchData(userid);
-		// setUser({
-		// 	id: "123",
-		// 	name: "John Doe",
-		// 	avatar:
-		// 		"https://i.redd.it/snoovatar/avatars/ca477838-4540-4a51-a168-04c2fbeb18e0.png",
-		// 	email: "johndoe@example.com",
-		// 	status: "active",
-		// 	timezone: "America/Los_Angeles",
-		// 	phoneNumber: "+1 (555) 123-4567",
-		// 	workspace: ["workspace1", "workspace2"],
-		// });
 	}, []);
 
 	return (
@@ -68,7 +58,7 @@ export default function SingleMessage(props: any) {
 						</span>
 					</div>
 					<div className="text-chat_module_text_1 text-[15px]">
-						{messageData.message}
+						<Markup content={messageData.message} />
 					</div>
 				</div>
 			</div>
