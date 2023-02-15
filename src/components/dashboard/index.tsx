@@ -15,8 +15,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 import ChatModule from "../chatModule";
 
-export default function DashBoard(props:any) {
-
+export default function DashBoard(props: any) {
 	const [workspace, setWorkspace] = React.useState<any>({
 		id: "",
 		name: "",
@@ -68,29 +67,36 @@ export default function DashBoard(props:any) {
 	console.log("Data: ", chatData);
 
 	return (
-		<div className="h-[100vh] bg-black text-text_color ">
-			<header className=" w-[100%] bg-dark_header flex items-center h-10 border-b border-border_color">
+		<div className="h-full bg-black text-text_color ">
+			<header className="h-[60px] w-[100%] bg-dark_header flex items-center border-b border-border_color ">
 				<span className=" w-[100%] flex items-center justify-center">
-					<CiClock2 className="text-[2rem] mr-[20px] text-white" />
+					<CiClock2 className="text-[1.3rem] mr-[20px] text-white" />
 					<input
 						placeholder="Search..."
-						className="w-[40%] h-6 rounded-md bg-[#3e3d42] text-sm pl-4  "
+						className="w-[40%] h-[30px] rounded-md bg-[#3e3d42] text-sm pl-4  "
 					/>
 				</span>
 				<span className="absolute right-0  mr-2">
 					<div className="flex flex-row items-center gap-4">
 						<span>
-							<CiCircleQuestion className="text-2xl text-white" />
+							<CiCircleQuestion className="text-[30px] text-white" />
 						</span>
-						<span>Profile</span>
+						<span>
+							{user && user.avatar && (
+								<img
+									className="w-[30px] h-[30px] object-fit rounded-full"
+									src={user.avatar}
+								/>
+							)}
+						</span>
 					</div>
 				</span>
 			</header>
-			<section className="flex bg-chat_section_color h-[100%] ">
-				<span className="flex flex-[0.2] bg-side_nav min-w-[250px] border-r border-border_color flex-col ">
+			<section className="flex bg-chat_section_color h-[calc(100%-60px)]">
+				<span className="flex flex-[0.2] bg-side_nav  min-w-[250px] border-r border-border_color flex-col ">
 					<div
 						id="workspace-name-container"
-						className="h-[50px] w-[100%] flex justify-between items-center px-3 border-b border-border_color"
+						className="h-[60px] w-[100%] flex justify-between items-center px-3 border-b border-border_color"
 					>
 						<div className="flex flex-row items-center ">
 							<span className="text-l font-bold ">{workspace.name}</span>
@@ -106,7 +112,7 @@ export default function DashBoard(props:any) {
 							className="mt-2"
 						>
 							<div className=" px-3 py-1">
-								<div className="flex flex-row items-center gap-2">
+								<div className="mt-[1rem] flex flex-row items-center gap-2">
 									<span
 										className=" p-[2px] cursor-pointer rounded hover:bg-hover_color "
 										onClick={() => setIsChannelVisible(!isChannelVisible)}
@@ -117,9 +123,8 @@ export default function DashBoard(props:any) {
 											<BsCaretRightFill />
 										)}
 									</span>
-									<span className="hover:bg-hover_color px-2 rounded cursor-pointer text-sm font-bold flex flex-row">
+									<span className="hover:bg-hover_color px-2 rounded cursor-pointer text-sm font-bold flex flex-row items-center">
 										Channels
-										<BiChevronDown className="text-2xl font-bold " />
 									</span>
 								</div>
 							</div>
@@ -165,7 +170,7 @@ export default function DashBoard(props:any) {
 							className="mt-2"
 						>
 							<div className=" px-3 py-1">
-								<div className="flex flex-row items-center gap-2">
+								<div className="mt-[1rem] flex flex-row items-center gap-2">
 									<span
 										className=" p-[2px] cursor-pointer rounded hover:bg-hover_color"
 										onClick={() =>
@@ -180,7 +185,6 @@ export default function DashBoard(props:any) {
 									</span>
 									<span className="hover:bg-hover_color px-2 rounded cursor-pointer text-sm font-bold flex flex-row">
 										Direct Messages
-										<BiChevronDown className="text-2xl font-bold " />
 									</span>
 								</div>
 							</div>
@@ -189,12 +193,12 @@ export default function DashBoard(props:any) {
 				</span>
 
 				{/* Chat section */}
-				<span className="flex flex-col gap-[2rem] flex-[1]">
+				<span className="flex flex-col gap-[2rem] flex-[1] justify-between">
 					<header
 						id="chat-section-header"
-						className="p-[1rem_2rem] w-full  border-b border-border_color w-[100%] flex justify-between items-center"
+						className="p-[1rem_2rem] w-full h-[60px]  border-b border-border_color w-[100%] flex justify-between items-center"
 					>
-						<div className="flex flex-row items-center">
+						<div className="flex flex-row items-center gap-[5px]">
 							<span>{selectedChat.name}</span>
 							<BiChevronDown />
 						</div>
