@@ -2,7 +2,7 @@ import React from 'react';
 import { FcGoogle } from 'react-icons/fc';
 import { FaGithub } from 'react-icons/fa';
 import { TfiWorld } from 'react-icons/tfi';
-import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { signInWithPopup, GoogleAuthProvider, GithubAuthProvider } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 
 import { auth, db } from "../../firebaseConfig";
@@ -70,7 +70,57 @@ const Signup = (props:prop) => {
 
     const authWithGithub = () =>{
         console.log("In auth");
-        handleSignUp();
+        console.log("In auth with github");
+		const provider = new GithubAuthProvider();
+
+		signInWithPopup(auth, provider)
+		.then(async (result) => {
+			// This gives you a GitHub Access Token. You can use it to access the GitHub API.
+			const credential:any = GithubAuthProvider.credentialFromResult(result);
+			const token = credential.accessToken;
+
+			// The signed-in user info.
+			const user = result.user;
+			console.log(user);
+			console.log(user);
+
+                const docRef = doc(db, "users", user.uid);
+                const docSnap = await getDoc(docRef);
+                
+                if (docSnap.exists()) {
+                    console.log("Go to Workspace",docSnap.data());
+                    props.setUser(docSnap.data());
+                    handleSignUpNavigation();
+                }else{
+                    let userDetails:any = {
+                        id: user.uid,
+                        name: user.displayName,
+                        avatar: user.photoURL,
+                        email: user.email,
+                        status: "Active",
+                        timezone: "",
+                        phoneNumber: user.phoneNumber,
+                        workspace: [],
+                        directMessages:[]
+                    };
+                    props.setUser(userDetails);
+                    console.log("Go to Form", userDetails);
+                    
+                    handleSignUp();
+                }
+			// IdP data available using getAdditionalUserInfo(result)
+			// ...
+		}).catch((error) => {
+			// Handle Errors here.
+			const errorCode = error.code;
+			const errorMessage = error.message;
+			// The email of the user's account used.
+			const email = error.customData.email;
+			// The AuthCredential type that was used.
+			const credential = GithubAuthProvider.credentialFromError(error);
+			// ...
+		});
+        // handleSignUp();
     }
 
     const handleSignUp = () =>{
