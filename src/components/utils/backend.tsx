@@ -115,6 +115,11 @@ export const send_message_in_channel = async (
 	}
 };
 
-// export const create_direct_message = async (user1) =>{
-
-// }
+// function creates direct message
+export const create_direct_message = async (user1: string, user2: string) => {
+	const dms_ref = collection(db, "dms");
+	const dms_initial_data = {
+		conversations: [],
+		members: [user1, user2],
+	};
+};
