@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 import DashBoard from "./components/dashboard";
 import OnBoardingComponent from "./components/onBoarding";
+import Loading from "./components/utils/Loading";
 
 function App() {
 	const [workspaceId, setWorksapceId] = useState<string | null>("");
@@ -38,7 +39,7 @@ function App() {
 					/>
 				)
 			) : (
-				<div>Loading...</div>
+				<Loading />
 			)}
 		</div>
 	);

@@ -3,11 +3,9 @@ import React, { useState } from "react";
 import Signin from "./Signin";
 import Signup from "./Signup";
 import SignUpForm from "./SignUpForm";
-import { User } from "../../types/index";
 import SetWorkspace from "./SetWorkspace";
 
 export default function OnBoardingComponent(props: any) {
-	const [onLogin, setOnLogin] = useState<boolean>(true);
 	const [user, setUser] = useState<any>({
 		id: "",
 		name: "",
@@ -22,7 +20,6 @@ export default function OnBoardingComponent(props: any) {
 
 	return (
 		<div className="bg-white">
-			{/* {onLogin===true?:} */}
 			<Signin
 				user={user}
 				setUser={setUser}

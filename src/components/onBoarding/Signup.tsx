@@ -57,14 +57,14 @@ const Signup = (props:prop) => {
                 }
 
             }).catch((error) => {
-                const errorCode = error.code;
+                // const errorCode = error.code;
                 const errorMessage = error.message;
                 console.log(errorMessage);
                 
                 const email = error.customData.email;
                 console.log(email);
 
-                const credential = GoogleAuthProvider.credentialFromError(error);
+                // const credential = GoogleAuthProvider.credentialFromError(error);
         });
     }
 
@@ -75,11 +75,8 @@ const Signup = (props:prop) => {
 
 		signInWithPopup(auth, provider)
 		.then(async (result) => {
-			// This gives you a GitHub Access Token. You can use it to access the GitHub API.
-			const credential:any = GithubAuthProvider.credentialFromResult(result);
-			const token = credential.accessToken;
-
-			// The signed-in user info.
+			// const credential:any = GithubAuthProvider.credentialFromResult(result);
+			// const token = credential.accessToken;
 			const user = result.user;
 			console.log(user);
 			console.log(user);
@@ -108,19 +105,14 @@ const Signup = (props:prop) => {
                     
                     handleSignUp();
                 }
-			// IdP data available using getAdditionalUserInfo(result)
-			// ...
 		}).catch((error) => {
-			// Handle Errors here.
-			const errorCode = error.code;
+			// const errorCode = error.code;
 			const errorMessage = error.message;
-			// The email of the user's account used.
-			const email = error.customData.email;
-			// The AuthCredential type that was used.
-			const credential = GithubAuthProvider.credentialFromError(error);
-			// ...
+            console.log(errorMessage);
+            
+			// const email = error.customData.email;
+			// const credential = GithubAuthProvider.credentialFromError(error);
 		});
-        // handleSignUp();
     }
 
     const handleSignUp = () =>{
@@ -133,7 +125,6 @@ const Signup = (props:prop) => {
     }
 
     const handleOnLogin = () =>{
-        // props.setOnLogin(!props.onlogin);
         const signup_component = document.getElementById("signup_component");
         signup_component?.classList.toggle("hidden");
         signup_component?.classList.toggle("flex");
@@ -156,9 +147,6 @@ const Signup = (props:prop) => {
     return (
         <div id="signup_component" className="h-screen w-screen flex-col items-center justify-between font-inter hidden">
             <div className="logo"><img src={logoFull} alt="Smack Logo" className="h-16" /></div>
-            {/* <div className="flex flex-col items-center">
-                <h1 className="text-4xl font-bold mb-3">Sign in to Smack</h1>
-            </div> */}
             <div className="auth flex flex-col justify-center items-center font-bold">
                 <button 
                     className="text-google p-2 border-2 border-google rounded-md flex justify-center items-center w-[350px] hover:shadow-md" 
@@ -179,9 +167,9 @@ const Signup = (props:prop) => {
                     <div><button className="text-auth_links text-bold" onClick={()=>handleOnLogin()}>Sign in to existing workspace</button></div>
                 </div>
                 <div className="mt-10 flex w-[350px] justify-between text-sm">
-                    <a href="#">Privacy & Terms</a>
-                    <a href="#">Contact Us</a>
-                    <a href="#" className="flex justify-center items-center"><TfiWorld className="mr-2"/>Contact Us</a>
+                    <span className="cursor-pointer">Privacy & Terms</span>
+                    <span className="cursor-pointer">Contact Us</span>
+                    <span className="flex justify-center items-center cursor-pointer"><TfiWorld className="mr-2"/>Contact Us</span>
                 </div>
             </div>
         </div>

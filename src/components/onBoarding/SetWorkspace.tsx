@@ -82,14 +82,14 @@ const SetWorkspace = (props: prop) => {
 				<div className="header border-b border-border_login p-4 w-full text-sm">
 					Workspaces for <strong>{props.user.email}</strong>
 				</div>
-				<div className="w-full p-4 flex justify-between items-center">
+				<div className="w-full p-4 flex justify-between items-center cursor-pointer hover:bg-hover_login hover:text-auth_links" onClick={navigateToDashboard}>
 					<img
 						src={workspaceImg}
 						alt="Workspace"
 						className="h-12"
 					/>
 					<div className="p-2 px-3 flex-grow font-bold">{workspace.name}</div>
-					<button onClick={navigateToDashboard}>
+					<button>
 						<AiOutlineArrowRight className="font-bold text-2xl hover:text-auth_links" />
 					</button>
 				</div>
@@ -97,15 +97,14 @@ const SetWorkspace = (props: prop) => {
 
 			<div className="footer pb-10 text-faded_login">
 				<div className="mt-10 flex w-[350px] justify-between text-sm">
-					<a href="#">Privacy & Terms</a>
-					<a href="#">Contact Us</a>
-					<a
-						href="#"
-						className="flex justify-center items-center"
+					<span className="cursor-pointer">Privacy & Terms</span>
+					<span className="cursor-pointer">Contact Us</span>
+					<span
+						className="flex justify-center items-center cursor-pointer"
 					>
 						<TfiWorld className="mr-2" />
 						Contact Us
-					</a>
+					</span>
 				</div>
 			</div>
 		</div>

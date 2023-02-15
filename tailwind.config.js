@@ -15,6 +15,7 @@ module.exports = {
 				faded_login: "#616061",
 				light_text_login: "#454245",
 				border_login: "#BBBABB",
+				hover_login:"#f8f8f8",
 
 				// ChatModule
 				chat_module_bg: "#1a1d21",
