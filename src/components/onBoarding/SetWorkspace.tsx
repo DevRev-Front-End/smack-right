@@ -14,6 +14,8 @@ type prop = {
 	setUser: React.Dispatch<React.SetStateAction<User>>;
 	setUserId: React.Dispatch<React.SetStateAction<string>>;
 	setWorkspaceId: React.Dispatch<React.SetStateAction<string>>;
+	toggleDashboard: boolean;
+	setToggleDashboard: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const SetWorkspace = (props: prop) => {
@@ -45,6 +47,7 @@ const SetWorkspace = (props: prop) => {
 	function navigateToDashboard() {
 		props.setUserId(props.user.id);
 		props.setWorkspaceId(workspaceId);
+		props.setToggleDashboard(!props.toggleDashboard);
 	}
 
 	React.useEffect(() => {

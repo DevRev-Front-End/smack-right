@@ -40,6 +40,8 @@ export default function OnBoardingComponent(props: any) {
 				setUser={setUser}
 				setUserId={props.setUserId}
 				setWorkspaceId={props.setWorkspaceId}
+				toggleDashboard = {props.toggleDashboard}
+				setToggleDashboard={props.setToggleDashboard}
 			/>
 		</React.Fragment>
 	);

@@ -15,9 +15,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 import ChatModule from "../chatModule";
 
-export default function DashBoard() {
-	const workspaceId = "0gl9PbsAOFYcnIeNzUwy";
-	const userId = "hW0ZxuFEOTPY6ysz6MC2";
+export default function DashBoard(props:any) {
 
 	const [workspace, setWorkspace] = React.useState<any>({
 		id: "",
@@ -43,9 +41,9 @@ export default function DashBoard() {
 	const fetchData = async () => {
 		setIsLoading(true);
 		const workSpaceRes = await getDoc(
-			doc(db, "workspace-collection", workspaceId)
+			doc(db, "workspace-collection", props.workspaceId)
 		);
-		const userResponse = await getDoc(doc(db, "users", userId));
+		const userResponse = await getDoc(doc(db, "users", props.userId));
 		setUser(userResponse.data());
 		setIsLoading(false);
 		setWorkspace(workSpaceRes.data());
@@ -53,7 +51,7 @@ export default function DashBoard() {
 
 	React.useEffect(() => {
 		fetchData();
-	}, [workspaceId, userId]);
+	}, [props.workspaceId, props.userId]);
 
 	const fetchChanelData = async () => {
 		const res = await getDoc(doc(db, "channels", selectedChat.id));
