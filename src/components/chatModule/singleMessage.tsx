@@ -37,15 +37,15 @@ export default function SingleMessage(props: any) {
 				// 		</div>
 				// 	)
 			}
-			<div className="w-full flex gap-[0.5rem] p-[0.5rem_2rem] bg-chat_module_bg hover:bg-chat_module_hover_bg">
-				<div className="w-[3rem] h-[3rem] rounded-sm flex justify-center items-center bg-chat_module_hover_bg overflow-hidden text-chat_module_text_1 text-xl">
+			<div className="w-full grid grid-cols-[3rem_auto] gap-[0.5rem] p-[0.5rem_2rem] bg-chat_module_bg hover:bg-chat_module_hover_bg">
+				<div className="w-[3rem] h-[3rem] rounded-sm flex justify-center items-center bg-chat_module_hover_bg overflow-hidden text-chat_module_text_1 text-xl ">
 					<img
-						className="w-[3rem] h-[3rem] object-cover"
+						className="min-w-[3rem] w-[3rem] h-[3rem] object-cover"
 						src={user?.avatar}
 						alt={user?.name}
 					/>
 				</div>
-				<div>
+				<div className="">
 					<div className="flex gap-[1rem] items-end">
 						<span className="text-chat_module_text_1 font-bold text-[15px] hover:underline hover:underline-offset-2 hover:cursor-pointer">
 							{user?.name}

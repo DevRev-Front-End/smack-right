@@ -7,12 +7,10 @@ import {
   BsCaretRightFill,
   BsShieldLock,
 } from "react-icons/bs";
-
 import { Workspace } from "../../types";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 import ChatModule from "../chatModule";
-
 export default function DashBoard(props: any) {
   const [workspace, setWorkspace] = React.useState<any>({
     id: "",
@@ -34,7 +32,6 @@ export default function DashBoard(props: any) {
     isPrivate: false,
     id: "sVblA0J0WXMePBS3Chy9",
   });
-
   const fetchData = async () => {
     setIsLoading(true);
     const workSpaceRes = await getDoc(
@@ -45,25 +42,22 @@ export default function DashBoard(props: any) {
     setIsLoading(false);
     setWorkspace(workSpaceRes.data());
   };
-
   React.useEffect(() => {
     fetchData();
   }, [props.workspaceId, props.userId]);
-
   const fetchChanelData = async (id: string) => {
-    const res = await getDoc(doc(db, "channels", id));
-    console.log("apiCall", res.data());
-    setChatData(res.data());
+    const unsub = onSnapshot(doc(db, "channels", id), (doc) => {
+      console.log("Current data: ", doc.data());
+      setChatData(doc.data());
+    });
+    // const res = await getDoc(doc(db, "channels", id));
+    // console.log("apiCall", res.data());
+    // setChatData(res.data());
   };
-
   React.useEffect(() => {
     fetchChanelData(selectedChat.id);
   }, []);
-
   if (isLoading) return <div>Loading...</div>;
-
-  console.log("Data: ", chatData);
-
   return (
     <div className="h-full bg-black text-text_color ">
       <header className="h-[60px] w-[100%] bg-dark_header flex items-center border-b border-border_color ">
@@ -73,7 +67,7 @@ export default function DashBoard(props: any) {
           </span>
           <input
             placeholder="Search..."
-            className="w-[40%] h-[30px] rounded-md bg-[#3e3d42] text-sm pl-4  "
+            className="w-[40%] h-[30px] rounded-md bg-[#3E3D42] text-sm pl-4  "
           />
         </span>
         <span className="absolute right-0  mr-2">
@@ -93,18 +87,16 @@ export default function DashBoard(props: any) {
         </span>
       </header>
       <section className="flex bg-chat_section_color h-[calc(100%-60px)]">
-        <span className="flex flex-[0.2] bg-side_nav  min-w-[250px] border-r border-border_color flex-col ">
+        <span className="flex flex-[0.2] bg-side_nav min-w-[250px] border-r border-border_color flex-col ">
           <div
             id="workspace-name-container"
-            className="h-[60px] w-[100%] flex justify-between items-center px-3 border-b border-border_color"
+            className="h-[50px] w-[100%] flex justify-between items-center px-3 border-b border-border_color"
           >
             <div className="flex flex-row items-center ">
               <span className="text-l font-bold ">{workspace.name}</span>
               <BiChevronDown className="text-2xl font-bold " />
             </div>
-            <span className="bg-white text-black text-xl w-[30px] h-[30px] flex justify-center items-center rounded-full">
-              <FaEdit className="text-sm" />
-            </span>
+            <span className="material-symbols-outlined">add_circle</span>
           </div>
           <div id="channels-container">
             <div id="channel-title" className="mt-2">
@@ -126,7 +118,6 @@ export default function DashBoard(props: any) {
                 </div>
               </div>
             </div>
-
             {/* channel list  */}
             {isChannelVisible &&
               workspace.channels.map((channel: any, ind: number) => {
@@ -160,7 +151,6 @@ export default function DashBoard(props: any) {
                 );
               })}
           </div>
-
           <div id="direct-message-container">
             <div id="direct-message-title" className="mt-2">
               <div className=" px-3 py-1">
@@ -185,12 +175,11 @@ export default function DashBoard(props: any) {
             </div>
           </div>
         </span>
-
         {/* Chat section */}
-        <span className="flex flex-col gap-[2rem] flex-[1] justify-between">
+        <span className="flex flex-col gap-[2rem] flex-[1] justify-between relative overflow-y-scroll">
           <header
+            className="bg-side_nav sticky top-0 p-[0rem_2rem] w-full min-h-[50px] border-b border-border_color w-[100%] flex justify-between items-center"
             id="chat-section-header"
-            className="p-[1rem_2rem] w-full h-[60px]  border-b border-border_color w-[100%] flex justify-between items-center"
           >
             <div className="flex flex-row items-center gap-[5px]">
               <span>{selectedChat.name}</span>
@@ -200,8 +189,13 @@ export default function DashBoard(props: any) {
               <BiPhoneCall />
             </span>
           </header>
-
-          {chatData && <ChatModule conversations={chatData.conversations} />}
+          {chatData && (
+            <ChatModule
+              userId={props.userId}
+              channelId={selectedChat.id}
+              conversations={chatData.conversations}
+            />
+          )}
         </span>
       </section>
     </div>
