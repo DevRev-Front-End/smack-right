@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import { Message } from "../../types";
 
@@ -9,9 +9,15 @@ type ChatModuleType = { messageData: any };
 
 export default function ChatModule(props: any) {
 	const [currentDate, setCurrentDate] = useState("");
+	const messagesEndRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		console.log("Props: ", props.conversations[0].dateOfCreation);
+		if (messagesEndRef.current) {
+			messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+		}
+	}, [props.conversations]);
+
+	useEffect(() => {
 		if (props.conversations[0].dateOfCreation) {
 			let currentDate = new Date(
 				props.conversations[0].dateOfCreation
@@ -22,7 +28,10 @@ export default function ChatModule(props: any) {
 	}, []);
 
 	return (
-		<div className="w-full">
+		<div
+			id="messages-container-channel"
+			className="w-full"
+		>
 			{props.conversations.map((message: any, index: number) => {
 				return (
 					<SingleMessage
@@ -34,6 +43,7 @@ export default function ChatModule(props: any) {
 					/>
 				);
 			})}
+			<div ref={messagesEndRef}></div>
 			<Editor
 				channelId={props.channelId}
 				userId={props.userId}

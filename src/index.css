@@ -101,3 +101,12 @@ code {
 	background-color: #35373b;
 	border-radius: 50px;
 }
+
+#messages-container-channel * {
+	overflow-anchor: none;
+}
+
+#messages-scroll-anchor {
+	overflow-anchor: auto;
+	height: 1px;
+}
