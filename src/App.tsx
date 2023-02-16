@@ -12,16 +12,34 @@ function App() {
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 
 	React.useEffect(() => {
+		var query = window.location.search.substring(1);
+        console.log(query)
+		if(query){
+			console.log("Searching params");
+			
+			var vars = query.split("&");
+			console.log(vars)
+			for (var i=0;i<vars.length;i++) {
+				var pair = vars[i].split("=");
+				console.log(pair)
+				if(pair[0]==="wid"){
+					setWorksapceId(pair[1]);
+					break;
+				}
+			}
+		}
 		if (
 			sessionStorage.getItem("workspaceId") &&
 			sessionStorage.getItem("userId")
 		) {
-			setWorksapceId(sessionStorage.getItem("workspaceId"));
+			if(workspaceId===""){
+				setWorksapceId(sessionStorage.getItem("workspaceId"));
+			}
 			setUserId(sessionStorage.getItem("userId"));
 			setToggleDashboard(true);
 		}
 		setIsLoading(false);
-	}, []);
+	}, [workspaceId]);
 
 	return (
 		<div className="h-full">
@@ -29,6 +47,7 @@ function App() {
 				toggleDashboard === false ? (
 					<OnBoardingComponent
 						setUserId={setUserId}
+						workspaceId = {workspaceId}
 						setWorkspaceId={setWorksapceId}
 						toggleDashboard={toggleDashboard}
 						setToggleDashboard={setToggleDashboard}

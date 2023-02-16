@@ -14,6 +14,7 @@ type prop = {
 	user: User;
 	setUser: React.Dispatch<React.SetStateAction<User>>;
 	setUserId: React.Dispatch<React.SetStateAction<string>>;
+	workspaceId:string,
 	setWorkspaceId: React.Dispatch<React.SetStateAction<string>>;
 	toggleDashboard: boolean;
 	setToggleDashboard: React.Dispatch<React.SetStateAction<boolean>>;
@@ -57,7 +58,7 @@ const SetWorkspace = (props: prop) => {
 		fetchData();
 	}, [props.user]);
 
-	if (isLoading) return <Loading />;
+	// if (isLoading) return <Loading />;
 
 	return (
 		<div

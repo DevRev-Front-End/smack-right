@@ -151,9 +151,12 @@ const Signin = (props: prop) => {
 	}
 
 	const handleNavigation = () =>{
+		console.log("In nav");
 		const setWorkspace_component = document.getElementById("setWorkspace_component");
 		setWorkspace_component?.classList.toggle("hidden");
 		setWorkspace_component?.classList.toggle("flex");
+		console.log(setWorkspace_component);
+		
 		const signin_component = document.getElementById("signin_component");
 		signin_component?.classList.toggle("hidden");
 		signin_component?.classList.toggle("flex");

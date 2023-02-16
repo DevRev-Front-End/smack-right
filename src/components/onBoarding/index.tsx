@@ -36,6 +36,7 @@ export default function OnBoardingComponent(props: any) {
 				user={user}
 				setUser={setUser}
 				setUserId={props.setUserId}
+				workspaceId = {props.workspaceId}
 				setWorkspaceId={props.setWorkspaceId}
 				toggleDashboard={props.toggleDashboard}
 				setToggleDashboard={props.setToggleDashboard}
