@@ -21,18 +21,13 @@ export default function ChatModule(props: any) {
 		}
 	}, []);
 
-	const [content, setContent] = useState("");
-
-	const handleContentChange = (newContent: string) => {
-		setContent(newContent);
-	};
-
 	return (
 		<div className="w-full">
-			{props.conversations.map((message: any) => {
+			{props.conversations.map((message: any, index: number) => {
 				return (
 					<SingleMessage
-						key={message.id}
+						key={index}
+						messageIndex={index}
 						messageData={message}
 						currentDate={currentDate}
 						setCurrentDate={setCurrentDate}

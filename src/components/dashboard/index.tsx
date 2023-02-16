@@ -95,18 +95,16 @@ export default function DashBoard(props: any) {
 				</span>
 			</header>
 			<section className="flex bg-chat_section_color h-[calc(100%-60px)]">
-				<span className="flex flex-[0.2] bg-side_nav  min-w-[250px] border-r border-border_color flex-col ">
+				<span className="flex flex-[0.2] bg-side_nav min-w-[250px] border-r border-border_color flex-col ">
 					<div
 						id="workspace-name-container"
-						className="h-[60px] w-[100%] flex justify-between items-center px-3 border-b border-border_color"
+						className="h-[50px] w-[100%] flex justify-between items-center px-3 border-b border-border_color"
 					>
 						<div className="flex flex-row items-center ">
 							<span className="text-l font-bold ">{workspace.name}</span>
 							<BiChevronDown className="text-2xl font-bold " />
 						</div>
-						<span className="bg-white text-black text-xl w-[30px] h-[30px] flex justify-center items-center rounded-full">
-							<FaEdit className="text-sm" />
-						</span>
+						<span className="material-symbols-outlined">add_circle</span>
 					</div>
 					<div id="channels-container">
 						<div
@@ -197,8 +195,8 @@ export default function DashBoard(props: any) {
 				{/* Chat section */}
 				<span className="flex flex-col gap-[2rem] flex-[1] justify-between relative overflow-y-scroll">
 					<header
+						className="bg-side_nav sticky top-0 p-[0rem_2rem] w-full min-h-[50px] border-b border-border_color w-[100%] flex justify-between items-center"
 						id="chat-section-header"
-						className="bg-side_nav sticky top-0 p-[1rem_2rem] w-full h-[60px]  border-b border-border_color w-[100%] flex justify-between items-center"
 					>
 						<div className="flex flex-row items-center gap-[5px]">
 							<span>{selectedChat.name}</span>

@@ -27,7 +27,7 @@ code {
 
 .jodit-react-container * {
 	background: #222529 !important;
-	border-color: #565856 !important;
+	border-color: #35373b !important;
 }
 
 .jodit-toolbar-button {
@@ -55,7 +55,7 @@ code {
 }
 
 .jodit-toolbar__box {
-	border-bottom: none !important;
+	border-bottom: 1px solid #35373b !important;
 	padding: 0.3rem;
 }
 
@@ -72,9 +72,32 @@ code {
 }
 
 .jodit-wysiwyg {
-	min-height: 40px !important;
+	min-height: 100px !important;
 }
 
 .jodit-wysiwyg::placeholder {
 	color: #78797b;
+}
+
+.jodit-workplace {
+	max-height: 150px !important;
+	min-height: auto !important;
+}
+
+.jodit-container {
+	min-height: 150px !important;
+	height: 150px !important;
+}
+
+*::-webkit-scrollbar {
+	display: none;
+}
+
+*::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+	background-color: #35373b;
+	border-radius: 50px;
 }
