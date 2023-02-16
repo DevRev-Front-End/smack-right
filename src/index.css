@@ -13,6 +13,7 @@ body {
 	height: 100vh;
 	background: #121016;
 	font-family: "Inter", sans-serif;
+	overflow: hidden;
 }
 
 code {
@@ -22,4 +23,58 @@ code {
 
 #root {
 	height: 100%;
+}
+
+.jodit-react-container * {
+	background: #222529 !important;
+	border-color: #565856 !important;
+}
+
+.jodit-toolbar-button {
+	border: none !important;
+	stroke: #d1d2d3 !important;
+}
+
+.jodit-toolbar-button__icon svg,
+.jodit-icon {
+	fill: #d1d2d3 !important;
+	width: 15px !important;
+	height: 15px !important;
+}
+
+.jodit-toolbar-button__icon {
+	stroke: #4b4e51 !important;
+}
+
+.jodit-react-container *::after {
+	display: none !important;
+}
+
+.jodit-ui-group:nth-child(3) {
+	display: none !important;
+}
+
+.jodit-toolbar__box {
+	border-bottom: none !important;
+	padding: 0.3rem;
+}
+
+/* .jodit-ui-separator {
+	display: none !important;
+} */
+
+.jodit-popup__content {
+	background: #222529 !important;
+}
+
+.jodit-ui-group {
+	gap: 0.5rem;
+}
+
+.jodit-wysiwyg {
+	min-height: 40px !important;
+}
+
+.jodit-wysiwyg::placeholder {
+	color: #78797b;
 }

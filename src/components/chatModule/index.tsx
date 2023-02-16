@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 
 import { Message } from "../../types";
+
+import Editor from "./editor";
 import SingleMessage from "./singleMessage";
 
 type ChatModuleType = { messageData: any };
@@ -18,6 +20,13 @@ export default function ChatModule(props: any) {
 			setCurrentDate(currentDate);
 		}
 	}, []);
+
+	const [content, setContent] = useState("");
+
+	const handleContentChange = (newContent: string) => {
+		setContent(newContent);
+	};
+
 	return (
 		<div className="w-full">
 			{props.conversations.map((message: any) => {
@@ -30,6 +39,10 @@ export default function ChatModule(props: any) {
 					/>
 				);
 			})}
+			<Editor
+				channelId={props.channelId}
+				userId={props.userId}
+			/>
 		</div>
 	);
 }

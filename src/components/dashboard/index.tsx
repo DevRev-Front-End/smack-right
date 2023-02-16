@@ -9,7 +9,7 @@ import {
 } from "react-icons/bs";
 
 import { Workspace } from "../../types";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 import ChatModule from "../chatModule";
 
@@ -51,9 +51,13 @@ export default function DashBoard(props: any) {
 	}, [props.workspaceId, props.userId]);
 
 	const fetchChanelData = async (id: string) => {
-		const res = await getDoc(doc(db, "channels", id));
-		console.log("apiCall", res.data());
-		setChatData(res.data());
+		const unsub = onSnapshot(doc(db, "channels", id), (doc) => {
+			console.log("Current data: ", doc.data());
+			setChatData(doc.data());
+		});
+		// const res = await getDoc(doc(db, "channels", id));
+		// console.log("apiCall", res.data());
+		// setChatData(res.data());
 	};
 
 	React.useEffect(() => {
@@ -61,8 +65,6 @@ export default function DashBoard(props: any) {
 	}, []);
 
 	if (isLoading) return <div>Loading...</div>;
-
-	console.log("Data: ", chatData);
 
 	return (
 		<div className="h-full bg-black text-text_color ">
@@ -193,10 +195,10 @@ export default function DashBoard(props: any) {
 				</span>
 
 				{/* Chat section */}
-				<span className="flex flex-col gap-[2rem] flex-[1] justify-between">
+				<span className="flex flex-col gap-[2rem] flex-[1] justify-between relative overflow-y-scroll">
 					<header
 						id="chat-section-header"
-						className="p-[1rem_2rem] w-full h-[60px]  border-b border-border_color w-[100%] flex justify-between items-center"
+						className="bg-side_nav sticky top-0 p-[1rem_2rem] w-full h-[60px]  border-b border-border_color w-[100%] flex justify-between items-center"
 					>
 						<div className="flex flex-row items-center gap-[5px]">
 							<span>{selectedChat.name}</span>
@@ -207,7 +209,13 @@ export default function DashBoard(props: any) {
 						</span>
 					</header>
 
-					{chatData && <ChatModule conversations={chatData.conversations} />}
+					{chatData && (
+						<ChatModule
+							userId={props.userId}
+							channelId={selectedChat.id}
+							conversations={chatData.conversations}
+						/>
+					)}
 				</span>
 			</section>
 		</div>
