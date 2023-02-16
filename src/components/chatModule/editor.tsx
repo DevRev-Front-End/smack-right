@@ -19,7 +19,7 @@ const Editor: React.FC<EditorProps> = ({ channelId, userId }) => {
 	};
 
 	return (
-		<div className="p-[1rem] sticky bottom-0">
+		<div className="p-[1rem] pt-0 sticky bottom-0 bg-chat_module_bg">
 			<JoditEditor
 				value={""}
 				config={{
