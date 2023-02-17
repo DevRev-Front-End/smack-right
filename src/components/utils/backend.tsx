@@ -175,9 +175,12 @@ export const add_workspace_to_user = async (
   workspaceId: string
 ) => {
   const user_ref = doc(db, "users", userId);
-
+  
   const docSnap: any = await getDoc(user_ref);
-  const workspace_list = docSnap.data()["workspaces"];
+  console.log(docSnap.data());
+  
+  const workspace_list = docSnap.data()["workspace"];
+  console.log(workspace_list,"list",workspaceId)
   if (workspace_list.includes(workspaceId)) return;
   await updateDoc(user_ref, {
     workspace: arrayUnion(workspaceId),
@@ -189,10 +192,10 @@ export const add_workspace_to_user = async (
 export const get_workspaces_from_user = async (userId: string) => {
   const user_ref = doc(db, "users", userId);
   const docSnap: any = await getDoc(user_ref);
-  const workspace_list = docSnap.data()["workspaces"];
+  const workspace_list = docSnap.data()["workspace"];
 
   const get_workspace_details = query(
-    collection(db, "workspaces"),
+    collection(db, "workspace-collection"),
     where("magicLink", "in", workspace_list)
   );
   const querySnapshot = await getDocs(get_workspace_details);
@@ -200,9 +203,11 @@ export const get_workspaces_from_user = async (userId: string) => {
   let workspaceId_data: any = [];
   querySnapshot.forEach((doc) => {
     workspaceId_data.push({
-      id: doc.data().id,
+      id: doc.id,
       name: doc.data().name,
     });
   });
+  // console.log(workspaceId_data, "Workspace list");
+  
   return workspaceId_data;
 };

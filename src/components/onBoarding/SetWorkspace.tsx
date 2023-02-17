@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import { TfiWorld } from "react-icons/tfi";
 import { AiOutlineArrowRight } from "react-icons/ai";
-import { doc, getDoc } from "firebase/firestore";
-
-import { db } from "../../firebaseConfig";
 
 import logoFull from "../../assets/logos/logo-full.svg";
 import workspaceImg from "../../assets/images/workspace-img.png";
 import { User } from "../../types";
 import Loading from "../utils/Loading";
+import { add_workspace_to_user, get_workspaces_from_user } from "../utils/backend";
 
 type prop = {
 	user: User;
@@ -21,49 +19,43 @@ type prop = {
 };
 
 const SetWorkspace = (props: prop) => {
-	const [workspaceId, setWorkspaceId] = useState<string>(
-		"0gl9PbsAOFYcnIeNzUwy"
-	);
-	
-	const [workspace, setWorkspace] = React.useState<any>({
-		id: "",
-		name: "",
-		magicLink: "",
-		admins: [],
-		channels: [],
-		members: [],
-	});
+	const [workspaceList, setWorkspaceList] = useState<any>([]);
 
 	const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
 	const fetchData = async () => {
 		setIsLoading(true);
-		const workSpaceRes = await getDoc(
-			doc(db, "workspace-collection", workspaceId)
-		);
+		
+		if(props.user){
+			if(props.workspaceId!==""){
+				await add_workspace_to_user(props.user.id,props.workspaceId)
+			}
+			const workspaces = await get_workspaces_from_user(props.user.id)
+			
+			setWorkspaceList(workspaces);
+		}
 
 		setIsLoading(false);
-		setWorkspace(workSpaceRes.data());
 	};
 
-	function navigateToDashboard() {
+	function navigateToDashboard(id:string) {
 		props.setUserId(props.user.id);
-		props.setWorkspaceId(workspaceId);
-		sessionStorage.setItem("workspaceId",workspaceId);
+		props.setWorkspaceId(id);
+		sessionStorage.setItem("workspaceId",id);
 		sessionStorage.setItem("userId",props.user.id);
 		props.setToggleDashboard(!props.toggleDashboard);
 	}
 
 	React.useEffect(() => {
 		fetchData();
-	}, [props.user]);
+	}, []);
 
 	// if (isLoading) return <Loading />;
 
 	return (
 		<div
 			id="setWorkspace_component"
-			className="w-screen h-screen text-red justify-between flex-col font-inter items-center hidden"
+			className="w-screen h-screen text-red flex justify-between flex-col font-inter items-center"
 		>
 			<div className="logo flex justify-center items-center relative w-full">
 				<img
@@ -86,17 +78,22 @@ const SetWorkspace = (props: prop) => {
 				<div className="header border-b border-border_login p-4 w-full text-sm">
 					Workspaces for <strong>{props.user.email}</strong>
 				</div>
-				<div className="w-full p-4 flex justify-between items-center cursor-pointer hover:bg-hover_login hover:text-auth_links" onClick={navigateToDashboard}>
-					<img
-						src={workspaceImg}
-						alt="Workspace"
-						className="h-12"
-					/>
-					<div className="p-2 px-3 flex-grow font-bold">{workspace.name}</div>
-					<span>
-						<AiOutlineArrowRight className="font-bold text-2xl hover:text-auth_links" />
-					</span>
-				</div>
+				{workspaceList.map((workspaceItem:any)=>
+
+					{	console.log(workspaceItem)
+						return(<div className="w-full p-4 flex justify-between items-center cursor-pointer hover:bg-hover_login hover:text-auth_links" onClick={()=>navigateToDashboard(workspaceItem.id)}>
+						<img
+							src={workspaceImg}
+							alt="Workspace"
+							className="h-12"
+						/>
+						<div className="p-2 px-3 flex-grow font-bold">{workspaceItem.name}</div>
+						<span>
+							<AiOutlineArrowRight className="font-bold text-2xl hover:text-auth_links" />
+						</span>
+					</div>)}
+				)}
+				
 			</div>
 
 			<div className="footer pb-10 text-faded_login">

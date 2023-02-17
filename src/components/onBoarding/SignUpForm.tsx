@@ -8,11 +8,13 @@ import {db} from "../../firebaseConfig";
 import logoFull from "../../assets/logos/logo-full.svg";
 import { useQuery } from 'react-query';
 import Loading from '../utils/Loading';
+import { add_workspace_to_user } from '../utils/backend';
 
 type prop = {
-    user:User,
-    setUser:React.Dispatch<React.SetStateAction<User>>
-}
+	user: any;
+	setUser: React.Dispatch<React.SetStateAction<any>>;
+	setToggleWorkspaceComponent:React.Dispatch<React.SetStateAction<boolean>>;
+};
 
 const SignUpForm = (props:prop) => {
 
@@ -23,6 +25,7 @@ const SignUpForm = (props:prop) => {
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [filteredTimeZones, setFilteredTimeZones] = useState<any>([]);
     const [timeZoneInput, setTimeZoneInput] = useState<string>("");
+
     let timeZones:any = []
 
 
@@ -39,39 +42,34 @@ const SignUpForm = (props:prop) => {
         setIsLoading(false);
     }
 
-    // const {data,isLoading, status} = useQuery("timeZone", fetchTimeZones)
-
     const handleSignUp = async () =>{
         let phoneNumber = props.user.phoneNumber;
         if(phoneNumber===""||phoneNumber==null){
             phoneNumber = phoneNumberInput.current.value;
         }
-        // let timezone = timeZoneInput.current.value;
-        // console.log(phoneNumber, timezone);
-        props.user.phoneNumber =phoneNumber;
-        props.user.timezone = timeZoneInput;
-        props.setUser(props.user)
-        console.log(props.user);
+        let userTemp = props.user
+        userTemp.phoneNumber =phoneNumber;
+        userTemp.timezone = timeZoneInput;
+        userTemp.workspace.push("0gl9PbsAOFYcnIeNzUwy");
+        props.setUser(userTemp);
 
         await setDoc(doc(db, "users", props.user.id), props.user);
-        
         handleSignUpNavigation();
     }
 
     const handleSignUpNavigation = () =>{
-        const setWorkspace_component = document.getElementById("setWorkspace_component");
-        setWorkspace_component?.classList.toggle("hidden");
-        setWorkspace_component?.classList.toggle("flex");
-        console.log(setWorkspace_component);
+        // const setWorkspace_component = document.getElementById("setWorkspace_component");
+        // setWorkspace_component?.classList.toggle("hidden");
+        // setWorkspace_component?.classList.toggle("flex");
         
-        const signup_form_component = document.getElementById("signup_form_component");
-        signup_form_component?.classList.toggle("hidden");
-        signup_form_component?.classList.toggle("flex");
+        // const signup_form_component = document.getElementById("signup_form_component");
+        // signup_form_component?.classList.toggle("hidden");
+        // signup_form_component?.classList.toggle("flex");
+        props.setToggleWorkspaceComponent(true);
     }
 
     const handleTimeZoneChange = () => (e:React.ChangeEvent<HTMLInputElement>)=> {
         let value = e.currentTarget.value;
-        console.log(value);
         
         if(value.length>0){
             timeZones = timeZone.filter((timeZone: any) => {
@@ -82,7 +80,6 @@ const SignUpForm = (props:prop) => {
         }
         setTimeZoneInput(value);
         setFilteredTimeZones(timeZones);
-        console.log(timeZones);
     }
 
     const selectTimeZone = (timeZone:string) =>{
@@ -113,7 +110,7 @@ const SignUpForm = (props:prop) => {
                 {(props.user.phoneNumber===""||props.user.phoneNumber==null)?<input type="text" name="phoneNumber" id="signup_phoneNumber" placeholder="work-phone-number" ref={phoneNumberInput} className="w-[350px] border border-[#bbbabb] p-2 rounded-md mb-5" />:""}
                 <input type="text" name="timezone" id="signup_timezone" placeholder="timezone" className="w-[350px] border border-[#bbbabb] p-2 rounded-md" onChange={handleTimeZoneChange()} value={timeZoneInput}/>
                 {filteredTimeZones.length>0?
-                    <div className="w-[350px] h-[120px] border border-black overflow-y-scroll">
+                    <div className="w-[350px] max-h-[120px] border border-black overflow-y-scroll">
                         {filteredTimeZones.map((timeZone:string) =>
                             <div className="p-2 w-full cursor-pointer hover:bg-gray-300" onClick={()=>selectTimeZone(timeZone)}>{timeZone}</div>
                         )}

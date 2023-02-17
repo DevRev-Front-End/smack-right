@@ -11,31 +11,25 @@ import {User} from "../../types/index";
 import logoFull from "../../assets/logos/logo-full.svg";
 
 type prop = {
-    user:any,
-    setUser:React.Dispatch<React.SetStateAction<any>>
-}
+	user: any;
+	setUser: React.Dispatch<React.SetStateAction<any>>;
+	setToggleWorkspaceComponent:React.Dispatch<React.SetStateAction<boolean>>;
+};
 
 const Signup = (props:prop) => {
 
     const authWithGoogle = () =>{
-        console.log("In auth");
-        console.log("In auth with google")
         const provider = new GoogleAuthProvider();
         
         signInWithPopup(auth, provider)
             .then(async (result:any) => {
-                const credential:any = GoogleAuthProvider.credentialFromResult(result);
-                const token = credential.accessToken;
-                console.log(token);
 
                 const user = result.user;
-                console.log(user);
 
                 const docRef = doc(db, "users", user.uid);
                 const docSnap = await getDoc(docRef);
                 
                 if (docSnap.exists()) {
-                    console.log("Go to Workspace",docSnap.data());
                     props.setUser(docSnap.data());
                     handleSignUpNavigation();
                 }else{
@@ -51,7 +45,6 @@ const Signup = (props:prop) => {
                         directMessages:[]
                     };
                     props.setUser(userDetails);
-                    console.log("Go to Form", userDetails);
                     
                     handleSignUp();
                 }
@@ -59,18 +52,14 @@ const Signup = (props:prop) => {
             }).catch((error) => {
                 // const errorCode = error.code;
                 const errorMessage = error.message;
-                console.log(errorMessage);
                 
                 const email = error.customData.email;
-                console.log(email);
 
                 // const credential = GoogleAuthProvider.credentialFromError(error);
         });
     }
 
     const authWithGithub = () =>{
-        console.log("In auth");
-        console.log("In auth with github");
 		const provider = new GithubAuthProvider();
 
 		signInWithPopup(auth, provider)
@@ -78,14 +67,11 @@ const Signup = (props:prop) => {
 			// const credential:any = GithubAuthProvider.credentialFromResult(result);
 			// const token = credential.accessToken;
 			const user = result.user;
-			console.log(user);
-			console.log(user);
 
                 const docRef = doc(db, "users", user.uid);
                 const docSnap = await getDoc(docRef);
                 
                 if (docSnap.exists()) {
-                    console.log("Go to Workspace",docSnap.data());
                     props.setUser(docSnap.data());
                     handleSignUpNavigation();
                 }else{
@@ -101,17 +87,11 @@ const Signup = (props:prop) => {
                         directMessages:[]
                     };
                     props.setUser(userDetails);
-                    console.log("Go to Form", userDetails);
                     
                     handleSignUp();
                 }
 		}).catch((error) => {
-			// const errorCode = error.code;
 			const errorMessage = error.message;
-            console.log(errorMessage);
-            
-			// const email = error.customData.email;
-			// const credential = GithubAuthProvider.credentialFromError(error);
 		});
     }
 
@@ -134,14 +114,14 @@ const Signup = (props:prop) => {
     }
 
     const handleSignUpNavigation = () =>{
-        const setWorkspace_component = document.getElementById("setWorkspace_component");
-        setWorkspace_component?.classList.toggle("hidden");
-        setWorkspace_component?.classList.toggle("flex");
-        console.log(setWorkspace_component);
+        // const setWorkspace_component = document.getElementById("setWorkspace_component");
+        // setWorkspace_component?.classList.toggle("hidden");
+        // setWorkspace_component?.classList.toggle("flex");
         
-        const signup_component = document.getElementById("signup_component");
-        signup_component?.classList.toggle("hidden");
-        signup_component?.classList.toggle("flex");
+        // const signup_component = document.getElementById("signup_component");
+        // signup_component?.classList.toggle("hidden");
+        // signup_component?.classList.toggle("flex");
+        props.setToggleWorkspaceComponent(true)
     }
 
     return (

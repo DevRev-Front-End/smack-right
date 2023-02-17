@@ -17,21 +17,28 @@ export default function OnBoardingComponent(props: any) {
 		workspace: [],
 		directMessages: [],
 	});
+	const [toggleWorkspaceComponent, setToggleWorkspaceComponent] = useState<boolean>(false);
 
 	return (
+		toggleWorkspaceComponent===false?
 		<div className="bg-white">
 			<Signin
 				user={user}
 				setUser={setUser}
-			/>
+				setToggleWorkspaceComponent={setToggleWorkspaceComponent}
+				/>
 			<Signup
 				user={user}
 				setUser={setUser}
-			/>
+				setToggleWorkspaceComponent={setToggleWorkspaceComponent}
+				/>
 			<SignUpForm
 				user={user}
 				setUser={setUser}
+				setToggleWorkspaceComponent={setToggleWorkspaceComponent}
 			/>
+		</div>:
+		<div className="bg-white">
 			<SetWorkspace
 				user={user}
 				setUser={setUser}
