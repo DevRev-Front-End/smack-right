@@ -13,6 +13,7 @@ import logoFull from "../../assets/logos/logo-full.svg";
 type prop = {
 	user: any;
 	setUser: React.Dispatch<React.SetStateAction<any>>;
+	setToggleWorkspaceComponent:React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const Signin = (props: prop) => {
@@ -20,22 +21,17 @@ const Signin = (props: prop) => {
 	const emailInput:any = useRef();
 
 	const authWithGoogle = async () => {
-		console.log("In auth with google");
 		const provider = new GoogleAuthProvider();
 
 		signInWithPopup(auth, provider)
 			.then(async(result: any) => {
-				const credential: any = GoogleAuthProvider.credentialFromResult(result);
-				const token = credential.accessToken;
 
 				const user = result.user;
-				console.log(user);
 				
                 const docRef = doc(db, "users", user.uid);
                 const docSnap = await getDoc(docRef);
                 
                 if (docSnap.exists()) {
-                    console.log("Go to Workspace",docSnap.data());
                     props.setUser(docSnap.data());
                     handleNavigation();
                 }else{
@@ -51,44 +47,32 @@ const Signin = (props: prop) => {
                         directMessages:[]
                     };
                     props.setUser(userDetails);
-                    console.log("Go to Form", userDetails);
                     
                     handleNavToForm();
                 }
 			})
 			.catch((error) => {
-				const errorCode = error.code;
+				// const errorCode = error.code;
 				const errorMessage = error.message;
-				console.log(errorMessage);
 
 				const email = error.customData.email;
-				console.log(email);
 
-				const credential = GoogleAuthProvider.credentialFromError(error);
+				// const credential = GoogleAuthProvider.credentialFromError(error);
 			});
 	};
 
 	const authWithGithub = () => {
-		console.log("In auth with github");
 		const provider = new GithubAuthProvider();
 
 		signInWithPopup(auth, provider)
 		.then(async (result) => {
-			// This gives you a GitHub Access Token. You can use it to access the GitHub API.
-			const credential:any = GithubAuthProvider.credentialFromResult(result);
-			const token = credential.accessToken;
 
-			// The signed-in user info.
 			const user = result.user;
-			console.log(user);
-			
-			console.log(user);
 				
 			const docRef = doc(db, "users", user.uid);
 			const docSnap = await getDoc(docRef);
 			
 			if (docSnap.exists()) {
-				console.log("Go to Workspace",docSnap.data());
 				props.setUser(docSnap.data());
 				handleNavigation();
 			}else{
@@ -104,26 +88,15 @@ const Signin = (props: prop) => {
 					directMessages:[]
 				};
 				props.setUser(userDetails);
-				console.log("Go to Form", userDetails);
 				
 				handleNavToForm();
 			}
-			// IdP data available using getAdditionalUserInfo(result)
-			// ...
 		}).catch((error) => {
-			// Handle Errors here.
-			const errorCode = error.code;
 			const errorMessage = error.message;
-			// The email of the user's account used.
-			const email = error.customData.email;
-			// The AuthCredential type that was used.
-			const credential = GithubAuthProvider.credentialFromError(error);
-			// ...
 		});
 	};
 
 	const authWithEmail = async () => {
-		console.log("In auth with email");
 		const email = emailInput.current.value;
 		const usersRef = collection(db, "users");
 		const user = query(usersRef, where("email", "==", email));
@@ -132,7 +105,6 @@ const Signin = (props: prop) => {
 		querySnapshot.forEach((doc) => {
 			users.push(doc.data());
 		});
-		console.log(users);
 		if(users.length > 0){
 			props.setUser(users[0]);
 			handleNavigation();
@@ -146,7 +118,6 @@ const Signin = (props: prop) => {
 		const signin_component = document.getElementById("signin_component");
 		signin_component?.classList.toggle("hidden");
 		signin_component?.classList.toggle("flex");
-		// props.setOnLogin(!props.onlogin);
 	};
 
 	const handleNavToForm = () =>{
@@ -159,12 +130,14 @@ const Signin = (props: prop) => {
 	}
 
 	const handleNavigation = () =>{
-		const setWorkspace_component = document.getElementById("setWorkspace_component");
-		setWorkspace_component?.classList.toggle("hidden");
-		setWorkspace_component?.classList.toggle("flex");
-		const signin_component = document.getElementById("signin_component");
-		signin_component?.classList.toggle("hidden");
-		signin_component?.classList.toggle("flex");
+		// const setWorkspace_component = document.getElementById("setWorkspace_component");
+		// setWorkspace_component?.classList.toggle("hidden");
+		// setWorkspace_component?.classList.toggle("flex");
+		// console.log(setWorkspace_component);
+		props.setToggleWorkspaceComponent(true);
+		// const signin_component = document.getElementById("signin_component");
+		// signin_component?.classList.toggle("hidden");
+		// signin_component?.classList.toggle("flex");
 	}
 
 	return (
@@ -240,15 +213,14 @@ const Signin = (props: prop) => {
 
 			<div className="footer pb-10 text-faded_login">
 				<div className="mt-10 flex w-[350px] justify-between text-sm">
-					<a href="#">Privacy & Terms</a>
-					<a href="#">Contact Us</a>
-					<a
-						href="#"
-						className="flex justify-center items-center"
+					<span className="cursor-pointer">Privacy & Terms</span>
+					<span className="cursor-pointer">Contact Us</span>
+					<span
+						className="flex justify-center items-center cursor-pointer"
 					>
 						<TfiWorld className="mr-2" />
 						Contact Us
-					</a>
+					</span>
 				</div>
 			</div>
 		</div>

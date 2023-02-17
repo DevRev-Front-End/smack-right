@@ -30,7 +30,7 @@ const DmDashboard = () => {
 	async function searchUserFunction(searchValue: any) {
 		if (searchValue !== "") {
 			let searchData = await get_user_suggestions(searchValue).then(
-				(data) => data
+				(data:any) => data
 			);
 			setSearchUserResult(searchData);
 		} else {

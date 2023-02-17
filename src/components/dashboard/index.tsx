@@ -13,6 +13,7 @@ import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 import ChatModule from "../chatModule";
 import { DmDashboard } from "./createDMDashboard";
+import WorkspaceListComponent from "../workspaces";
 
 export default function DashBoard(props: any) {
 	// States
@@ -101,6 +102,11 @@ export default function DashBoard(props: any) {
 				</span>
 			</header>
 			<section className="flex bg-chat_section_color h-[calc(100%-60px)]">
+				<WorkspaceListComponent
+					workspaceId={props.workspaceId}
+					userId={props.userId}
+					setWorkspaceId={props.setWorksapceId}
+				/>
 				<span className="flex flex-[0.2] bg-side_nav min-w-[250px] border-r border-border_color flex-col ">
 					<div
 						id="workspace-name-container"

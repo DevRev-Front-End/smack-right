@@ -15,6 +15,7 @@ module.exports = {
 				faded_login: "#616061",
 				light_text_login: "#454245",
 				border_login: "#BBBABB",
+				hover_login:"#f8f8f8",
 
 				// ChatModule
 				chat_module_bg: "#1a1d21",
@@ -35,6 +36,9 @@ module.exports = {
 				chat_module_bg: "#1a1d21",
 				chat_module_border: "#35373b",
 				chat_module_hover_bg: "#222529",
+
+				// Workspaces
+				workspace_module_active_border:"#d1d2d3",
 			},
 			fontFamily: {
 				inter: ["Inter", "sans-serif"],
