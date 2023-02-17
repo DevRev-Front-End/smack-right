@@ -7,11 +7,15 @@ import {
 	BsCaretRightFill,
 	BsShieldLock,
 } from "react-icons/bs";
+
 import { Workspace } from "../../types";
 import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 import ChatModule from "../chatModule";
+import { DmDashboard } from "./createDMDashboard";
+
 export default function DashBoard(props: any) {
+	// States
 	const [workspace, setWorkspace] = React.useState<any>({
 		id: "",
 		name: "",
@@ -32,6 +36,9 @@ export default function DashBoard(props: any) {
 		isPrivate: false,
 		id: "sVblA0J0WXMePBS3Chy9",
 	});
+	const [showCreateDmDashboard, setShowCreateDmDashboard] =
+		React.useState<boolean>(false);
+
 	const fetchData = async () => {
 		setIsLoading(true);
 		const workSpaceRes = await getDoc(
@@ -42,6 +49,7 @@ export default function DashBoard(props: any) {
 		setIsLoading(false);
 		setWorkspace(workSpaceRes.data());
 	};
+
 	React.useEffect(() => {
 		fetchData();
 	}, [props.workspaceId, props.userId]);
@@ -50,10 +58,16 @@ export default function DashBoard(props: any) {
 			console.log("Current data: ", doc.data());
 			setChatData(doc.data());
 		});
-		// const res = await getDoc(doc(db, "channels", id));
-		// console.log("apiCall", res.data());
-		// setChatData(res.data());
 	};
+
+	function showAddDMForm() {}
+
+	function channelOnClick(channel: any) {
+		setShowCreateDmDashboard(false);
+		setSelectedChat(channel);
+		fetchChanelData(channel.id);
+	}
+
 	React.useEffect(() => {
 		fetchChanelData(selectedChat.id);
 	}, []);
@@ -134,8 +148,7 @@ export default function DashBoard(props: any) {
 											<div
 												className="flex flex-row items-center gap-2 py-1 hover:bg-hover_color rounded-md "
 												onClick={() => {
-													setSelectedChat(channel);
-													fetchChanelData(channel.id);
+													channelOnClick(channel);
 												}}
 											>
 												<span className=" p-[2px]  rounded ">
@@ -173,8 +186,18 @@ export default function DashBoard(props: any) {
 											<BsCaretRightFill />
 										)}
 									</span>
-									<span className="hover:bg-hover_color px-2 rounded cursor-pointer text-sm font-bold flex flex-row">
-										Direct Messages
+									<span className="px-2 rounded cursor-pointer text-sm font-bold flex flex-row items-center justify-between w-full">
+										Direct Messages{" "}
+										<button
+											onClick={() => {
+												setShowCreateDmDashboard(!showCreateDmDashboard);
+											}}
+											className="flex flex-row items-center ml-[10px]"
+										>
+											<span className="material-symbols-outlined text-[20px]">
+												add
+											</span>
+										</button>
 									</span>
 								</div>
 							</div>
@@ -182,27 +205,31 @@ export default function DashBoard(props: any) {
 					</div>
 				</span>
 				{/* Chat section */}
-				<span className="flex flex-col gap-[2rem] flex-[1] justify-between relative overflow-y-scroll">
-					<header
-						className="bg-side_nav sticky top-0 p-[0rem_2rem] w-full min-h-[50px] border-b border-border_color w-[100%] flex justify-between items-center"
-						id="chat-section-header"
-					>
-						<div className="flex flex-row items-center gap-[5px]">
-							<span>{selectedChat.name}</span>
-							<BiChevronDown />
-						</div>
-						<span>
-							<BiPhoneCall />
-						</span>
-					</header>
-					{chatData && (
-						<ChatModule
-							userId={props.userId}
-							channelId={selectedChat.id}
-							conversations={chatData.conversations}
-						/>
-					)}
-				</span>
+				{showCreateDmDashboard === true ? (
+					<DmDashboard />
+				) : (
+					<span className="flex flex-col gap-[2rem] flex-[1] justify-between relative overflow-y-scroll">
+						<header
+							className="bg-side_nav sticky top-0 p-[0rem_2rem] w-full min-h-[50px] border-b border-border_color w-[100%] flex justify-between items-center"
+							id="chat-section-header"
+						>
+							<div className="flex flex-row items-center gap-[5px]">
+								<span>{selectedChat.name}</span>
+								<BiChevronDown />
+							</div>
+							<span>
+								<BiPhoneCall />
+							</span>
+						</header>
+						{chatData && (
+							<ChatModule
+								userId={props.userId}
+								channelId={selectedChat.id}
+								conversations={chatData.conversations}
+							/>
+						)}
+					</span>
+				)}
 			</section>
 		</div>
 	);
