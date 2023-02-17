@@ -176,12 +176,18 @@ export const add_workspace_to_user = async (
 ) => {
   const user_ref = doc(db, "users", userId);
 
-  const docSnap: any = await getDoc(user_ref);
-  const workspace_list = docSnap.data()["workspaces"];
-  if (workspace_list.includes(workspaceId)) return;
-  await updateDoc(user_ref, {
-    workspace: arrayUnion(workspaceId),
-  });
+  const workspace_ref = doc(db, "workspaces", workspaceId);
+  const workspace_snap = await getDoc(workspace_ref);
+  if (workspace_snap.exists()) {
+    const docSnap: any = await getDoc(user_ref);
+    const workspace_list = docSnap.data()["workspaces"];
+    if (workspace_list.includes(workspaceId)) return;
+    await updateDoc(user_ref, {
+      workspace: arrayUnion(workspaceId),
+    });
+  } else {
+    console.log("Workspace not exists !");
+  }
 };
 
 // get workspaces from user return name workspace ,id workspace
@@ -206,3 +212,38 @@ export const get_workspaces_from_user = async (userId: string) => {
   });
   return workspaceId_data;
 };
+
+// Create a direct messages in directmessage table
+
+export const create_directmessages = async (
+  workspaceId: string,
+  ...userIds: string[]
+) => {
+  const dms_ref = collection(db, "dms");
+  const dms_initial_data = {
+    conversations: [],
+    users: userIds,
+  };
+
+  //  initialling dms in direct message Table
+  const res = await addDoc(dms_ref, dms_initial_data);
+
+  //  updating usersDirectMessage in respective workspace table
+  const wrokspace_ref = doc(db, "workspace-collection", workspaceId);
+
+  let userDetials: any = [];
+  userIds.forEach((userId) => {
+    let userDetail: any = get_user_details(userId);
+    userDetials.push({
+      avatar: userDetail.avatar,
+      id: userId,
+      status: userDetail.status,
+    });
+  });
+
+  await updateDoc(wrokspace_ref, {
+    userDirectMessages: arrayUnion(userDetials),
+  });
+};
+
+
