@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 
 import workspaceImg from "../../assets/images/workspace-img.png";
 import { get_workspaces_from_user } from '../utils/backend'
 
-const WorkSpacesComponent = (props: any) => {
+const WorkSpacesListComponent = (props: any) => {
 
     const [workspaceList, setWorkspaceList] = useState<any>([])
     const [activeWorkspace, setActiveWorkspace] = useState<any>()
@@ -46,4 +46,4 @@ const WorkSpacesComponent = (props: any) => {
     )
 }
 
-export default WorkSpacesComponent
+export default WorkSpacesListComponent

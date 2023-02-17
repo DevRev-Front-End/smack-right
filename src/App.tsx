@@ -4,7 +4,6 @@ import DashBoard from "./components/dashboard";
 import OnBoardingComponent from "./components/onBoarding";
 import { add_workspace_to_user } from "./components/utils/backend";
 import Loading from "./components/utils/Loading";
-import WorkSpacesComponent from "./components/workspaces";
 
 function App() {
 	const [workspaceId, setWorkspaceId] = useState<string | null>(null);
@@ -17,7 +16,7 @@ function App() {
 		let workspace:any = "";
 		if(query){
 			var vars = query.split("&");
-			for (var i=0;i<vars.length;i++) {
+			for (var i = 0; i < vars.length; i++) {
 				var pair = vars[i].split("=");
 				if(pair[0]==="wid"){
 					// console.log("pair",pair[1]);
@@ -56,23 +55,17 @@ function App() {
 				toggleDashboard === false ? (
 					<OnBoardingComponent
 						setUserId={setUserId}
-						workspaceId = {workspaceId}
+						workspaceId={workspaceId}
 						setWorkspaceId={setWorkspaceId}
 						toggleDashboard={toggleDashboard}
 						setToggleDashboard={setToggleDashboard}
-						/>
-						) : (
-						<div className="flex h-screen">
-							<WorkSpacesComponent
-								workspaceId={workspaceId}
-								userId={userId}
-								setWorkspaceId={setWorkspaceId}
-							/>
-							<DashBoard
-								workspaceId={workspaceId}
-								userId={userId}
-							/>
-						</div>
+					/>
+				) : (
+					<DashBoard
+						workspaceId={workspaceId}
+						userId={userId}
+						setWorkspaceId={setWorkspaceId}
+					/>
 				)
 			) : (
 				<Loading />

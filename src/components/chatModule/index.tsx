@@ -43,7 +43,10 @@ export default function ChatModule(props: any) {
 					/>
 				);
 			})}
-			<div ref={messagesEndRef}></div>
+			<div
+				className="h-[50px]"
+				ref={messagesEndRef}
+			></div>
 			<Editor
 				channelId={props.channelId}
 				userId={props.userId}
