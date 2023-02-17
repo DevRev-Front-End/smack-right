@@ -81,7 +81,7 @@ const SetWorkspace = (props: prop) => {
 				{workspaceList.map((workspaceItem:any)=>
 
 					{
-						return(<div className="w-full p-4 flex justify-between items-center cursor-pointer hover:bg-hover_login hover:text-auth_links" onClick={()=>navigateToDashboard(workspaceItem.id)}>
+						return(<div key={workspaceItem.id} className="w-full p-4 flex justify-between items-center cursor-pointer hover:bg-hover_login hover:text-auth_links" onClick={()=>navigateToDashboard(workspaceItem.id)}>
 								<img
 									src={workspaceImg}
 									alt="Workspace"

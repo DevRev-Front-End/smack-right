@@ -7,36 +7,44 @@ import Loading from "./components/utils/Loading";
 import WorkSpacesComponent from "./components/workspaces";
 
 function App() {
-	const [workspaceId, setWorksapceId] = useState<string | null>("");
+	const [workspaceId, setWorkspaceId] = useState<string | null>(null);
 	const [userId, setUserId] = useState<string | null>("");
 	const [toggleDashboard, setToggleDashboard] = useState<boolean>(false);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 
 	React.useEffect(() => {
 		var query = window.location.search.substring(1);
+		let workspace:any = "";
 		if(query){
 			var vars = query.split("&");
 			for (var i=0;i<vars.length;i++) {
 				var pair = vars[i].split("=");
 				if(pair[0]==="wid"){
-					setWorksapceId(pair[1]);
+					// console.log("pair",pair[1]);
+					workspace = pair[1];
+					// setWorkspaceId(wkspaceID);
+					// console.log("id",typeof wkspaceID, wkspaceID);
+					window.history.replaceState(null, "", window.location.pathname);
 					break;
 				}
 			}
-			window.history.replaceState(null, "", window.location.pathname);
 		}
 		if (
 			sessionStorage.getItem("workspaceId") &&
 			sessionStorage.getItem("userId")
 		) {
-			if(workspaceId===""){
-				setWorksapceId(sessionStorage.getItem("workspaceId"));
+			if(workspace===""){
+				workspace=sessionStorage.getItem("workspaceId");
 			}else{
-				if(workspaceId!==null)
-					sessionStorage.setItem("workspaceId",workspaceId);
-				add_workspace_to_user(sessionStorage.getItem("userId"),workspaceId)
+				// console.log(workspaceId);
+				
+				if(workspace!==null&&workspace!=="")
+					sessionStorage.setItem("workspaceId",workspace);
+				add_workspace_to_user(sessionStorage.getItem("userId"),workspace)
+
 			}
 			setUserId(sessionStorage.getItem("userId"));
+			setWorkspaceId(workspace);
 			setToggleDashboard(true);
 		}
 		setIsLoading(false);
@@ -49,7 +57,7 @@ function App() {
 					<OnBoardingComponent
 						setUserId={setUserId}
 						workspaceId = {workspaceId}
-						setWorkspaceId={setWorksapceId}
+						setWorkspaceId={setWorkspaceId}
 						toggleDashboard={toggleDashboard}
 						setToggleDashboard={setToggleDashboard}
 						/>
@@ -58,7 +66,7 @@ function App() {
 							<WorkSpacesComponent
 								workspaceId={workspaceId}
 								userId={userId}
-								setWorkspaceId={setWorksapceId}
+								setWorkspaceId={setWorkspaceId}
 							/>
 							<DashBoard
 								workspaceId={workspaceId}
