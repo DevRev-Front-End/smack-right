@@ -36,6 +36,9 @@ module.exports = {
 				chat_module_bg: "#1a1d21",
 				chat_module_border: "#35373b",
 				chat_module_hover_bg: "#222529",
+
+				// Workspaces
+				workspace_module_active_border:"#d1d2d3",
 			},
 			fontFamily: {
 				inter: ["Inter", "sans-serif"],

@@ -2,7 +2,9 @@ import React, { useState } from "react";
 
 import DashBoard from "./components/dashboard";
 import OnBoardingComponent from "./components/onBoarding";
+import { add_workspace_to_user } from "./components/utils/backend";
 import Loading from "./components/utils/Loading";
+import WorkSpacesComponent from "./components/workspaces";
 
 function App() {
 	const [workspaceId, setWorksapceId] = useState<string | null>("");
@@ -21,6 +23,7 @@ function App() {
 					break;
 				}
 			}
+			window.history.replaceState(null, "", window.location.pathname);
 		}
 		if (
 			sessionStorage.getItem("workspaceId") &&
@@ -28,6 +31,10 @@ function App() {
 		) {
 			if(workspaceId===""){
 				setWorksapceId(sessionStorage.getItem("workspaceId"));
+			}else{
+				if(workspaceId!==null)
+					sessionStorage.setItem("workspaceId",workspaceId);
+				add_workspace_to_user(sessionStorage.getItem("userId"),workspaceId)
 			}
 			setUserId(sessionStorage.getItem("userId"));
 			setToggleDashboard(true);
@@ -45,12 +52,19 @@ function App() {
 						setWorkspaceId={setWorksapceId}
 						toggleDashboard={toggleDashboard}
 						setToggleDashboard={setToggleDashboard}
-					/>
-				) : (
-					<DashBoard
-						workspaceId={workspaceId}
-						userId={userId}
-					/>
+						/>
+						) : (
+						<div className="flex h-screen">
+							<WorkSpacesComponent
+								workspaceId={workspaceId}
+								userId={userId}
+								setWorkspaceId={setWorksapceId}
+							/>
+							<DashBoard
+								workspaceId={workspaceId}
+								userId={userId}
+							/>
+						</div>
 				)
 			) : (
 				<Loading />

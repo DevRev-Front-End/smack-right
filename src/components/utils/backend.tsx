@@ -171,16 +171,16 @@ export const create_direct_message = async (
 // add workspaces to user (userId,workspaceId)
 
 export const add_workspace_to_user = async (
-  userId: string,
-  workspaceId: string
+  userId: any,
+  workspaceId: any
 ) => {
   const user_ref = doc(db, "users", userId);
 
-  const workspace_ref = doc(db, "workspaces", workspaceId);
+  const workspace_ref = doc(db, "workspace-collection", workspaceId);
   const workspace_snap = await getDoc(workspace_ref);
   if (workspace_snap.exists()) {
     const docSnap: any = await getDoc(user_ref);
-    const workspace_list = docSnap.data()["workspaces"];
+    const workspace_list = docSnap.data()["workspace"];
     if (workspace_list.includes(workspaceId)) return;
     await updateDoc(user_ref, {
       workspace: arrayUnion(workspaceId),
